@@ -1,7 +1,7 @@
 import printFloorplan as pf
 
-def parseBlocks(filename):
-	file = open(filename,'r')
+def parseBlocks(dataset):
+	file = open("Data/"+dataset+".blocks",'r')
 
 	rectangles = []
 	
@@ -25,7 +25,7 @@ def parseBlocks(filename):
 
 
 	# Print rectangles
-	pf.printFloorplan(rectangles,'ami33.png')
+	pf.printFloorplan(rectangles,"Output/"+dataset+".png")
 
 
 # Primitive algorithm to place blocks along diagonal (for testing)
@@ -40,5 +40,8 @@ def diagonalizeRectangles(rectangles):
 	return
 
 
-parseBlocks("Data/ami33.blocks")
-	
+parseBlocks("ami33")
+parseBlocks("ami49")
+parseBlocks("apte")
+parseBlocks("hp")
+parseBlocks("xerox")
