@@ -91,4 +91,4 @@ def test():
 
 	printFloorplan(myRectangles,'rect1.png')
 
-test()
+#test()
