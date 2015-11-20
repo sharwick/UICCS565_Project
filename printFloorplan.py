@@ -58,26 +58,15 @@ def findMinY(array):
 	return min	
 ########################################################################
 
-R1 = Rect(1,0.1,0.5,0.5)
-R2 = Rect(0.6,0.7,0.2,0.1)
-R3 = Rect(0.5,0.7,0.1,0.1)
-R4 = Rect(0,0.7,0.1,0.1)
-
-rectangles = [R1,R2,R3,R4]
 
 
-MINX = findMinX(rectangles)
-MAXX = findMaxX(rectangles)
-MINY = findMinY(rectangles)
-MAXY = findMaxY(rectangles)
 
-print(MINX)
-print(MAXX)
-print(MINY)
-print(MAXY)
+def printFloorplan(rectangles,outfile):
+	MINX = findMinX(rectangles)
+	MAXX = findMaxX(rectangles)
+	MINY = findMinY(rectangles)
+	MAXY = findMaxY(rectangles)
 
-
-def printFloorplan():
 
 	fig1 = plt.figure()
 	ax1 = fig1.add_subplot(111, aspect='equal')
@@ -89,6 +78,17 @@ def printFloorplan():
 	for j in range(len(rectangles)):
 		ax1.add_patch(rectangles[j].makePatch())
 
-	fig1.savefig('rect1.png', dpi=90, bbox_inches='tight')
+	fig1.savefig(outfile, dpi=90, bbox_inches='tight')
 
-printFloorplan()
+
+def test():
+	R1 = Rect(1,0.1,0.5,0.5)
+	R2 = Rect(0.6,0.7,0.2,0.1)
+	R3 = Rect(0.5,0.7,0.1,0.1)
+	R4 = Rect(0,0.7,0.1,0.1)
+
+	myRectangles = [R1,R2,R3,R4]
+
+	printFloorplan(myRectangles,'rect1.png')
+
+test()
