@@ -1,0 +1,54 @@
+[ 88 ] source -: time compass TEST/MCNCami33.txt ../results/MCNCami33-txt.bbb --txt --HIER_CLUSTER_BASE 9
+===== CompaSS (Compacting Soft Slicing Packings) =====
+WARNING: Algorithm not chosen, "--hierarchical" assumed.
+---< HIERARCHICAL Packing >---
+Details:
+  - Block type: all hard, free orientations.
+  - Area accuracy: 0.50%.
+Parameters:
+  - HIER_CLUSTER_BASE: 9
+  - HIER_CLUSTER_AREA_DEV: 1.85
+  - HIER_INIT_AR: 1.20
+  - HIER_USE_AR_LEVEL: 2
+  - HIER_WIDTH_INCRE: 1.15
+  - HIER_HEIGHT_INCRE: 1.15
+  - HIER_INIT_DEADSPACE: 0.05
+  - HIER_DEADSPACE_INCRE: 1.50
+  - HIER_SIMILARITY_THRESHOLD: 1.90
+ 
+[0]===== Grouping 33 clusters...
+[0]===== Packing into 9 clusters...
+ * Aspect ratio bound not used.
+ 
+finished 1 / 9. cluster size: 3 time: 0.00
+finished 2 / 9. cluster size: 10 time: 1.81
+finished 3 / 9. cluster size: 10 time: 5.38
+finished 4 / 9. cluster size: 2 time: 5.38
+finished 5 / 9. cluster size: 2 time: 5.38
+finished 6 / 9. cluster size: 1 time: 5.38
+finished 7 / 9. cluster size: 2 time: 5.38
+finished 8 / 9. cluster size: 2 time: 5.38
+finished 9 / 9. cluster size: 1 time: 5.38
+ 
+blkArea:  1156449.00 deadspace:    20874.00 (1.81%) time: 5.38
+ 
+[1]===== Grouping 9 clusters...
+[1]===== Packing into 1 clusters...
+ * Aspect ratio bound not used.
+ 
+blkArea:  1156449.00 deadspace:    57183.00 (4.94%) time: 6.19
+ 
+total area:  1213632.00
+block area:  1156449.00
+deadspace:     57183.00
+ 
+After operator optimization,
+blkArea:  1156449.00 deadspace:    57183.00 (4.94%) time: 6.19
+ 
+total area:  1213632.00
+block area:  1156449.00
+deadspace:     57183.00
+ 
+Output successfully written to ../results/MCNCami33-txt.bbb
+===== Thanks for using CompaSS =====
+6.180u 0.010s 0:10.32 59.9%     0+0k 0+0io 268pf+0w
