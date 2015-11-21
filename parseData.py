@@ -88,15 +88,20 @@ def createDictionary(rectangles):
 # Create an image of the given dataset using the diagonalize algorithm
 # Input = the name of a raw dataset (without file extension or directory)
 # Output = a .png saved in the Output directory.  No value is returned.
-def printDiagonal(dataset):
+def createDiagonal(dataset):
 	rectangles = parseBlocks(dataset)
 
 	# Transform blocks
 	diagonalizeRectangles(rectangles)
 
+	return rectangles
+
+def printDiagonal(dataset):
+	rectangles = importDiagonal(dataset)
+
 	# Print rectangles
 	pf.printFloorplan(rectangles,"Output/"+dataset+".png")
-	return
+
 
 ################################################################################################
 # ALGORITHMS TO TRANSFORM FLOORPLANS
