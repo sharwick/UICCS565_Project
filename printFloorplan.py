@@ -4,11 +4,12 @@ import numpy as np
 
 ########################################################################
 class Rect:
-	def __init__(self,inX,inY,inW,inH):
+	def __init__(self,inX,inY,inW,inH,name):
 		self.x = inX
 		self.y = inY
 		self.w = inW
 		self.h = inH
+		self.name = name
 
 	def makePatch(self):
 		p = patches.Rectangle(
@@ -77,7 +78,7 @@ def printFloorplan(rectangles,outfile):
 
 	for j in range(len(rectangles)):
 		ax1.add_patch(rectangles[j].makePatch())
-
+		
 	fig1.savefig(outfile, dpi=90, bbox_inches='tight')
 
 

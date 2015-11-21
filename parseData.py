@@ -1,4 +1,5 @@
 import printFloorplan as pf
+import numpy as np
 
 datasets = ["ami33", "ami49","apte", "hp", "xerox"] # To make performing operations on all benchmarks easier
 
@@ -26,8 +27,9 @@ def parseBlocks(dataset):
 			#print(subline) #check
 			#print(x1+x2+x3+x4) # check
 			#print(y1+y2+y3+y4) # check
+			name = line.split()[0]
 
-			rect = pf.Rect(x1,y1,max(x1,x2,x3,x4),max(y1,y2,y3,y4))
+			rect = pf.Rect(x1,y1,max(x1,x2,x3,x4),max(y1,y2,y3,y4),name)
 			rectangles.append(rect)
 
 	return rectangles
@@ -38,8 +40,47 @@ def parseBlocks(dataset):
 # Input = the name of a raw dataset (without file extension or directory)
 # Output = netlist data
 def parseNetlists(dataset):
-	# SH WORKING ON THIS NEXT
-	return
+	file = open("Data/"+dataset+".nets",'r')
+	netlists = []
+	current = []
+
+	for line in file:
+		if line.find("NetDegree")>-1:
+			if (len(current)>0):
+				netlists.append(current)
+				current = []
+
+		elif line.find("%")>-1:
+			current.append(line.split()[0])
+	return netlists
+
+# Capture the number of connections between modules
+def createConnectionMatrix(netlists, dictionary):
+	length = len(dictionary)
+	matrix = np.zeros((length,length))
+
+	for net in netlists:
+		for i in net:
+			for j in net:
+				#print(i + "|" + j)
+				if dictionary[i]!=dictionary[j]:
+					matrix[dictionary[i],dictionary[j]] += 1
+
+	return matrix
+
+def createDictionary(rectangles):
+	keys = []
+
+	for r in rectangles:
+		keys.append(r.name)
+
+	d = dict.fromkeys(keys)
+
+	for i in range(len(keys)):
+		d[keys[i]] = i
+
+	return d
+	
 
 ################################################################################################
 # FUNCTIONS TO CREATE IMAGES USING DESIRED ALGORITHMS
@@ -75,7 +116,29 @@ def diagonalizeRectangles(rectangles):
 ################################################################################################
 # RUN ANALYSES ON ALL AVAILABLE DATASETS
 
-for ds in datasets:
-	printDiagonal(ds)
+def diagonalTest():
+	for ds in datasets:
+		printDiagonal(ds)
+
+#diagonalTest()
+
+
+def check(ds):
+	rectangles = parseBlocks(ds)
+	netlists = parseNetlists(ds)
+	dictionary = createDictionary(rectangles)
+	matrix = createConnectionMatrix(netlists,dictionary)
+
+
+	def printChecks():
+		print("Netlists")
+		print(netlists)
+		print("Dictionary")
+		print(dictionary)
+		print("Matrix:")
+		print(matrix)
+	#printChecks()
+
+check('ami33')
 
 
