@@ -55,7 +55,7 @@ def parseNetlists(dataset):
 	return netlists
 
 # Capture the number of connections between modules
-def createConnectionMatrix(netlists, dictionary):
+def createConnectionMatrix(netlists, dictionary,rectangles):
 	length = len(dictionary)
 	matrix = np.zeros((length,length))
 
@@ -65,6 +65,15 @@ def createConnectionMatrix(netlists, dictionary):
 				#print(i + "|" + j)
 				if dictionary[i]!=dictionary[j]:
 					matrix[dictionary[i],dictionary[j]] += 1
+
+	# Add connection values to rectangles
+	sums = np.sum(matrix,0)
+
+	for i in range(length):
+		rectangles[i].connections = sums[i]
+		rectangles[i].connectionsRatio = sums[i]/np.max(sums)
+		#print(sums[i])
+	#print(np.sum(sums))
 
 	return matrix
 
@@ -97,7 +106,10 @@ def createDiagonal(dataset):
 	return rectangles
 
 def printDiagonal(dataset):
-	rectangles = importDiagonal(dataset)
+	rectangles = createDiagonal(dataset)
+	netlists = parseNetlists(dataset)
+	dictionary = createDictionary(rectangles)
+	matrix = createConnectionMatrix(netlists,dictionary,rectangles)	
 
 	# Print rectangles
 	pf.printFloorplan(rectangles,"Output/"+dataset+".png")
@@ -125,14 +137,14 @@ def diagonalTest():
 	for ds in datasets:
 		printDiagonal(ds)
 
-#diagonalTest()
+diagonalTest()
 
 
 def check(ds):
 	rectangles = parseBlocks(ds)
 	netlists = parseNetlists(ds)
 	dictionary = createDictionary(rectangles)
-	matrix = createConnectionMatrix(netlists,dictionary)
+	matrix = createConnectionMatrix(netlists,dictionary,rectangles)
 
 
 	def printChecks():

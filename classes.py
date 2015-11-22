@@ -1,3 +1,6 @@
+import matplotlib.pyplot as plt
+import matplotlib.patches as patches
+
 ########################################################################
 # A single rect represents a module, along with geographic data
 class Rect:
@@ -7,6 +10,8 @@ class Rect:
 		self.w = inW
 		self.h = inH
 		self.name = name
+		self.connections = 0
+		self.connectionsRatio = 0
 
 	def makePatch(self):
 		p = patches.Rectangle(
