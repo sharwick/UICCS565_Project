@@ -118,8 +118,8 @@ def try2():
 				type = '-'
 
 				# Modify the existing rectangles (i.e., move j)
-				rectJ.x = rectI.x+rectI.w
-				rectJ.y = rectI.y
+				#rectJ.x = rectI.x+rectI.w
+				#rectJ.y = rectI.y
 				
 			else:
 				newH = max(rectI.y,rectJ.y)
@@ -127,8 +127,8 @@ def try2():
 				type = '|'
 
 				# Modify the existing rectangles (i.e., move j)
-				rectJ.x = rectI.x
-				rectJ.y = rectI.y+rectI.h
+				#rectJ.x = rectI.x
+				#rectJ.y = rectI.y+rectI.h
 				
 
 			nodeI = RectNode(None,None,'rect',rectI)
@@ -142,7 +142,26 @@ def try2():
 
 		# Create new layer in tree
 		for i in xrange(0,len(nodes)-1,2):
-			newNode = RectNode(nodes[i],nodes[i+1],'-',None)
+			left = nodes[i]
+			right = nodes[i+1]
+
+			# Choose split direction that will minimize area (unless it violates skewness)
+			verticalStackArea = max(left.w,right.w)*(left.h+right.h)
+			horizontalStackArea = max(left.h,right.h)*(left.w+right.w) 
+			stack = '|'
+
+			if horizontalStackArea<verticalStackArea:
+				stack='-'
+
+			# Ensure that we are creating a skew tree
+			if right.type != 'rect':
+				if right.type == '-':
+					stack = '|'
+				else:
+					stack = '-'
+
+
+			newNode = RectNode(nodes[i],nodes[i+1],stack,None)
 			newNodes.append(newNode)
 		# Handle edge case where there is an unmatched odd node
 		if len(newNodes)*2<len(nodes):
@@ -151,8 +170,12 @@ def try2():
 		nodes = newNodes
 
 	root = nodes[0]
+	utils.updateTreeDimensions(root)
 
 	print(utils.getPolish(root))
-
+	print(root.w)
+	print(root.h)
+	print(root.getArea())
+	pfp.printFloorplan(rectangles,"Output/temp.png")
 try2()
 
