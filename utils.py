@@ -1,5 +1,7 @@
 import numpy as np
 
+benchmarks = ["ami33", "ami49","apte", "hp", "xerox"] # To make performing operations on all benchmarks easier
+
 # Return the indices of the maximum value of a matrix
 def getMaxOfMatrix(matrix):
 	maxValue = np.max(matrix)
