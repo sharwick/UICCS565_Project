@@ -1,5 +1,6 @@
 import numpy as np
 
+# Return the indices of the maximum value of a matrix
 def getMaxOfMatrix(matrix):
 	maxValue = np.max(matrix)
 
@@ -11,6 +12,7 @@ def getMaxOfMatrix(matrix):
 	return -1
 
 
+# Returns a string with Polish expression of a slicing tree
 def getPolish(root):
 	if root.type == 'rect':
 		return '\n'+root.rect.name
@@ -53,3 +55,11 @@ def _updateTreeDimensionsHelper(root,wAdj,hAdj):
 		_updateTreeDimensionsHelper(root.right,wAdjSub,hAdjSub)
 
 	return
+
+
+def sortByShape(node):
+	# return node.h/node.w # aspect ratio made it worse
+	# return node.w # width alone improved by 50%
+	# return node.w*node.h # area made a bit worse but not like aspect ratio
+	# return node.h # height improved but not as much as width
+	return max(node.h,node.w)
