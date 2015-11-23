@@ -72,8 +72,6 @@ def createConnectionMatrix(netlists, dictionary,rectangles):
 	for i in range(length):
 		rectangles[i].connections = sums[i]
 		rectangles[i].connectionsRatio = sums[i]/np.max(sums)
-		#print(sums[i])
-	#print(np.sum(sums))
 
 	return matrix
 
@@ -89,6 +87,16 @@ def createDictionary(rectangles):
 		d[keys[i]] = i
 
 	return d
+
+
+# A single function to create fundamental data used for all analyses (for a particular benchmark)
+def createAllBaseData(dataset):
+	rectangles = parseBlocks(dataset)
+	netlists = parseNetlists(dataset)
+	dictionary = createDictionary(rectangles)
+	matrix = createConnectionMatrix(netlists,dictionary,rectangles)
+
+	return (rectangles,netlists,dictionary,matrix)	
 	
 
 ################################################################################################

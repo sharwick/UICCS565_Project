@@ -18,9 +18,17 @@ class Rect:
 				(self.x,self.y),
 				self.w,
 				self.h,
-				hatch='/',
+				#hatch='/',
 	        	fill=True,	   
 	        	facecolor="#959595", 
 			)
 		return p
 ########################################################################
+
+
+class RectNode:
+	def __init__(self,left,right,type,rect):
+		self.left = left	# a RectNode or a Rect
+		self.right = right	# a RectNode or a Rect
+		self.type = type 	# "-" or "|" or "rect"
+		self.rect = rect  	# if stack == "node" then this is a Rect object
