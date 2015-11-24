@@ -30,6 +30,21 @@ def getPolish(root):
 
 	return polish
 
+def getPolishArray(root):
+	if root.type == 'rect':
+		return [root.rect.name]
+
+	polish = []
+	if (root.left is not None):
+		polish += getPolishArray(root.left)
+
+	if (root.right is not None):
+		polish += getPolishArray(root.right)
+
+	polish += [root.type]
+
+	return polish
+
 # Given a root, update the dimensions of the slicing tree to reflect the slicing tree
 def updateTreeDimensions(root):
 	_updateTreeDimensionsHelper(root,0,0)	

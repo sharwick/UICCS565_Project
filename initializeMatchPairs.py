@@ -122,7 +122,10 @@ def initializeMatchPairs(dataset):
 		print(root.getArea())
 	#printTest()
 
+	print(utils.getPolishArray(root))
 	pfp.printFloorplan(rectangles,"Output/initialMatchPairs_" + dataset + ".png")
+
+	return root
 
 
 # Run this analysis for all benchmarks

@@ -16,3 +16,11 @@ def getAreaRectangle(rectangleName):
 
 print(getAreaFloorplan(rectangles))
 
+
+
+
+#############################################################################
+# Compute cost of a slicing tree based on overall area alone
+def costArea(root):
+	return root.w*root.h
+

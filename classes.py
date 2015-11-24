@@ -67,3 +67,23 @@ class RectNode:
 		if self.w is not None and self.h is not None:
 			return self.w*self.h
 		return -1
+
+
+
+########################################################################
+class AnnealingParameters:
+	# T = initial temp
+	# r = adjustment to T
+	# k = # of moves
+	# thresholdAccepted = min percent of accepted moves
+	# thresholdTime = max amount of time
+	# thresholdTemp
+	def __init__(self,T,r,k,thresholdAccepted,thresholdTime,thresholdTemp):
+		self.T = T
+		self.r = r
+		self.k = k
+		self.thresholdAccepted = thresholdAccepted
+		self.thresholdTime = thresholdTime #(in microseconds)
+		self.thresholdTemp = thresholdTemp
+
+		return
