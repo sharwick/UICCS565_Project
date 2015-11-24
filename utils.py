@@ -1,4 +1,6 @@
 import numpy as np
+from copy import copy, deepcopy
+from classes import RectNode, Rect
 
 benchmarks = ["ami33", "ami49","apte", "hp", "xerox"] # To make performing operations on all benchmarks easier
 
@@ -30,6 +32,7 @@ def getPolish(root):
 
 	return polish
 
+# Return an array version of the Polish expression (easier to manipulate than a string)
 def getPolishArray(root):
 	if root.type == 'rect':
 		return [root.rect.name]
@@ -44,6 +47,37 @@ def getPolishArray(root):
 	polish += [root.type]
 
 	return polish
+
+# Construct a tree from Polish expression
+def getTreeFromPolishArray(array, rectangles,dictionary):
+	# Construct new tree
+	stack = []
+
+	for i in range(len(array)):
+		element = array[i]
+
+		# Create deep copy of rectangles when adding them to stack
+		if element != '-' and element != '|':
+			index = dictionary[element]
+			newNode = RectNode(None,None,'rect',deepcopy(rectangles[dictionary[element]]))
+
+			# Restart at 0 so I can rebuild given the new tree structure
+			newNode.rect.x = 0
+			newNode.rect.y = 0
+			stack.append(newNode)
+		else:
+			right = stack.pop()
+			left = stack.pop()
+			newNode = RectNode(left,right,element,None)
+			stack.append(newNode)
+
+	# Get new dimensions
+	root = stack[0]
+	updateTreeDimensions(root)
+
+	return root
+
+
 
 # Given a root, update the dimensions of the slicing tree to reflect the slicing tree
 def updateTreeDimensions(root):

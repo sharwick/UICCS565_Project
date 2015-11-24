@@ -121,14 +121,25 @@ def initializeMatchPairs(dataset):
 		print(root.h)
 		print(root.getArea())
 	#printTest()
+	
 
-	print(utils.getPolishArray(root))
+	def checkPolishArray():
+		print(utils.getPolishArray(root))
+		polishArray = utils.getPolishArray(root)
+		newTree = utils.getTreeFromPolishArray(polishArray,rectangles,dictionary)
+		print("**************************************")
+		print(utils.getPolishArray(newTree))
+	#checkPolishArray()
+
 	pfp.printFloorplan(rectangles,"Output/initialMatchPairs_" + dataset + ".png")
 
-	return root
+	return (root, rectangles, dictionary, matrix)
 
 
 # Run this analysis for all benchmarks
-for dataset in utils.benchmarks:
-	initializeMatchPairs(dataset)
+def analyzeAllBenchmarks():
+	for dataset in utils.benchmarks:
+		initializeMatchPairs(dataset)
+#analyzeAllBenchmarks()
 
+initializeMatchPairs(utils.benchmarks[0])
