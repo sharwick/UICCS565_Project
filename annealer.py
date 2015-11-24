@@ -3,7 +3,6 @@
 ########################################################################
 
 import utils
-#import timeit
 import time
 import math
 import random
@@ -13,7 +12,7 @@ from copy import copy, deepcopy
 from initializeMatchPairs import initializeMatchPairs
 import printFloorplan as pfp
 
-annealingParameters = classes.AnnealingParameters(100,.85,5,.05,2,1)
+annealingParameters = classes.AnnealingParameters(100,.85,5,.05,1,1)
 
 
 def updateSolution(root,rectangles,dictionary):
@@ -46,7 +45,6 @@ def anneal(dataset, annealingParameters, cost):
 	# Solutions will be represented by roots to a slicing tree
 
 	# Setup
-	#start = timeit.default_timer()
 	start = time.time()
 	(initialSolution, rectangles, dictionary, matrix) = initializeMatchPairs(dataset)
 
@@ -66,14 +64,13 @@ def anneal(dataset, annealingParameters, cost):
 		uphill = 0
 		reject = 0
 
-		#time = timeit.default_timer() - start
 		timeDiff = time.time() - start
 
 		while (reject/MT <= 1-annealingParameters.thresholdAccepted) and T>=annealingParameters.thresholdTemp and timeDiff<=annealingParameters.thresholdTime:
 
 			newSolution = updateSolution(currentSolution,rectangles,dictionary)
 			#print(cost(newSolution))
-			print(cost(bestSolution))
+			#print(cost(bestSolution))
 
 			MT += 1
 			deltaCost = cost(newSolution) - cost(currentSolution)
@@ -89,16 +86,35 @@ def anneal(dataset, annealingParameters, cost):
 					bestSolution = currentSolution
 			else:
 				reject += 1
-
-			#time = timeit.default_timer() - start			
+	
 			timeDiff = time.time() - start
 
 		T = annealingParameters.r*T
 
+	newRectangles = []
+	def constructNewRectangleMatrix(node):
+		if node.type == 'rect':
+			newRectangles.append(node.rect)
+		else:
+			if node.left is not None:
+				constructNewRectangleMatrix(node.left)
+			if node.right is not None:
+				constructNewRectangleMatrix(node.right)
 
-	pfp.printFloorplan(rectangles,'Output/annealing.png')
+	constructNewRectangleMatrix(bestSolution)
+
+	print("Total area for " + dataset + " = " + str(bestSolution.w*bestSolution.h))
+	pfp.printFloorplan(newRectangles,'Output/annealing_' + dataset + '.png')
 	return bestSolution
 
 
 
-anneal(utils.benchmarks[0], annealingParameters,metrics.costArea)
+
+# Run this analysis for all benchmarks
+def analyzeAllBenchmarks():
+	for dataset in utils.benchmarks:
+		print("Starting benchmark analysis: " + dataset)
+		anneal(dataset, annealingParameters,metrics.costArea)
+#analyzeAllBenchmarks()
+#anneal(utils.benchmarks[0], annealingParameters,metrics.costArea)
+anneal(utils.benchmarks[4], annealingParameters,metrics.costArea)
