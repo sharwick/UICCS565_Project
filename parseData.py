@@ -164,7 +164,7 @@ def check(ds):
 		print(matrix)
 	#printChecks()
 
-check('ami33')
+#check('ami33')
 #tag test
 #tag SH TEST
 

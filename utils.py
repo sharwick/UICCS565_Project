@@ -118,9 +118,11 @@ def sortByShape(node):
 
 # Consider the possible rotations of the rectangles and update the height/width/origin to represent minimal area pairing
 def optimizeTwoRectangles(rect1,rect2):
-	# Need only rotate and/or move one rectangle (say rect2).  
-	flip = false
-	sign = null
+	# Need only rotate and/or move one rectangle (say rect2). 
+
+	# Defaults (to be updated later if necessary) 
+	sign = "|"
+
 
 	# Case 1 - no flip, above
 	w = max(rect1.w,rect2.w)
@@ -144,17 +146,33 @@ def optimizeTwoRectangles(rect1,rect2):
 
 	area = min(area1,area2,area3,area4)
 
-	if area==area1 or area==area3:
-		sign = '-'
+	
+	if area==area1:
+		#rect2.x = rect1.x
+		#rect2.y = rect1.y+rect1.h
+		sign = "-"		
 	elif area==area2:
-		flip=true
-		sign='|'
-	elif area==area4:
-		flip = true
-		sign = '|'
-
-	if flip:
+		#rect2.x = rect1.x + rect1.w
+		#rect2.y = rect1.y
+		sign = "|"		
+	elif area==area3:
 		flipRect(rect2)
+		#rect2.x = rect1.x
+		#rect2.y = rect1.y+rect1.h
+		sign = "-"				
+	else:
+		flipRect(rect2)
+		#rect2.x = rect1.x + rect1.w
+		#rect2.y = rect1.y
+		sign = "|"
+
+	def printTest():
+		print(rect1.name + "|" + rect2.name)
+		print((area1,area2,area3,area4))
+		if sign=="|":
+			print((rect1.w+rect2.w)*max(rect1.h,rect2.h))
+		else:
+			print((rect1.h+rect2.h)*max(rect1.w,rect2.w))
 
 	return sign;
 
@@ -162,3 +180,5 @@ def flipRect(rect):
 	temp = rect.w
 	rect.w = rect.h
 	rect.h = temp
+	rect.flipped = not rect.flipped
+	return True
