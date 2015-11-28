@@ -60,7 +60,7 @@ def findMaxY(rectangles):
     return maxy
 
 
-<<<<<<< HEAD
+
    
 def getAreaFloorplan(rectangles): # total area of floor
     MIN_X = findMinX(rectangles)
@@ -92,7 +92,7 @@ def getAreaRectangle(rectangleName): # rectangle name to rectangle area, need to
 print(findMid(rectangles))
 
 #print(manhattanDist(rectangles))
-=======
+
 
 
 
@@ -101,4 +101,4 @@ print(findMid(rectangles))
 def costArea(root):
 	return root.w*root.h
 
->>>>>>> 9b480c0e3e32e7fea75c76e25b05d08f324dd108
+
