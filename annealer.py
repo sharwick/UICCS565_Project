@@ -105,7 +105,8 @@ def anneal(dataset, annealingParameters, cost):
 
 	print("Total area for " + dataset + " = " + str(bestSolution.w*bestSolution.h))
 	pfp.printFloorplan(newRectangles,'Output/annealing_' + dataset + '.png')
-	return bestSolution
+
+	return (bestSolution, rectangles, dictionary, matrix)
 
 
 
@@ -117,4 +118,4 @@ def analyzeAllBenchmarks():
 		anneal(dataset, annealingParameters,metrics.costArea)
 #analyzeAllBenchmarks()
 #anneal(utils.benchmarks[0], annealingParameters,metrics.costArea)
-anneal(utils.benchmarks[4], annealingParameters,metrics.costArea)
+#anneal(utils.benchmarks[4], annealingParameters,metrics.costArea)

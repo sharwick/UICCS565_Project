@@ -114,3 +114,51 @@ def sortByShape(node):
 	# return node.w*node.h # area made a bit worse but not like aspect ratio
 	# return node.h # height improved but not as much as width
 	return max(node.h,node.w)
+
+
+# Consider the possible rotations of the rectangles and update the height/width/origin to represent minimal area pairing
+def optimizeTwoRectangles(rect1,rect2):
+	# Need only rotate and/or move one rectangle (say rect2).  
+	flip = false
+	sign = null
+
+	# Case 1 - no flip, above
+	w = max(rect1.w,rect2.w)
+	h = rect1.h + rect2.h
+	area1 = w*h
+
+	# Case 2 - no flip, aside
+	w = rect1.w + rect2.w
+	h = max(rect1.h,rect2.h)
+	area2 = w*h
+
+	# Case 3 - flip, above
+	w = max(rect1.w,rect2.h)
+	h = rect1.h + rect2.w
+	area3 = w*h
+
+	# Case 4 - flip, aside
+	w = rect1.w + rect2.h
+	h = max(rect1.h,rect2.w)
+	area4 = w*h
+
+	area = min(area1,area2,area3,area4)
+
+	if area==area1 or area==area3:
+		sign = '-'
+	elif area==area2:
+		flip=true
+		sign='|'
+	elif area==area4:
+		flip = true
+		sign = '|'
+
+	if flip:
+		flipRect(rect2)
+
+	return sign;
+
+def flipRect(rect):
+	temp = rect.w
+	rect.w = rect.h
+	rect.h = temp
