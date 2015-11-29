@@ -4,16 +4,21 @@ from classes import RectNode, Rect
 
 benchmarks = ["ami33", "ami49","apte", "hp", "xerox"] # To make performing operations on all benchmarks easier
 
-# Return the indices of the maximum value of a matrix
+# Return the indices of the maximum value of a matrix.  Don't return along diagonal unless there are no matches left.
 def getMaxOfMatrix(matrix):
 	maxValue = np.max(matrix)
+
+	backup = -1
 
 	for i in range(len(matrix)):
 		for j in range(len(matrix)):
 			if maxValue==matrix[i,j]:
-				return (i,j)
+				if i==j:
+					backup = (i,j)
+				else:
+					return (i,j)
 
-	return -1
+	return backup
 
 
 # Returns a string with Polish expression of a slicing tree
@@ -90,8 +95,9 @@ def _updateTreeDimensionsHelper(root,wAdj,hAdj):
 		root.rect.y += hAdj
 		return
 
-	# Recursive calls
-	_updateTreeDimensionsHelper(root.left,wAdj,hAdj)
+	# Recursive calls - adjust the right branch with the dimensions of the left/bottom branch
+	if root.left is not None:
+		_updateTreeDimensionsHelper(root.left,wAdj,hAdj)
 
 	if root.right is not None:
 		wAdjSub = wAdj
@@ -105,7 +111,14 @@ def _updateTreeDimensionsHelper(root,wAdj,hAdj):
 
 		_updateTreeDimensionsHelper(root.right,wAdjSub,hAdjSub)
 
-	return
+	return True
+
+# Reset all rectangles to origin
+def resetRectangles(rectangles):
+	for r in rectangles:
+		r.x=0
+		r.y=0
+	return True
 
 
 def sortByShape(node):
@@ -117,12 +130,12 @@ def sortByShape(node):
 
 
 # Consider the possible rotations of the rectangles and update the height/width/origin to represent minimal area pairing
+# Can be used from rectangles or nodes
 def optimizeTwoRectangles(rect1,rect2):
 	# Need only rotate and/or move one rectangle (say rect2). 
 
-	# Defaults (to be updated later if necessary) 
+	# Defaults (to be below later if necessary) 
 	sign = "|"
-
 
 	# Case 1 - no flip, above
 	w = max(rect1.w,rect2.w)
@@ -144,26 +157,26 @@ def optimizeTwoRectangles(rect1,rect2):
 	h = max(rect1.h,rect2.w)
 	area4 = w*h
 
+	# Final area of the combo
 	area = min(area1,area2,area3,area4)
 
-	
+	#print(str(isinstance(rect2,RectNode)) + '|' + str(isinstance(rect2,RectNode)))
+
 	if area==area1:
-		#rect2.x = rect1.x
-		#rect2.y = rect1.y+rect1.h
 		sign = "-"		
 	elif area==area2:
-		#rect2.x = rect1.x + rect1.w
-		#rect2.y = rect1.y
 		sign = "|"		
 	elif area==area3:
-		flipRect(rect2)
-		#rect2.x = rect1.x
-		#rect2.y = rect1.y+rect1.h
+		if isinstance(rect2,Rect):
+			flipRect(rect2)
+		else:
+			flipNode(rect2)
 		sign = "-"				
 	else:
-		flipRect(rect2)
-		#rect2.x = rect1.x + rect1.w
-		#rect2.y = rect1.y
+		if isinstance(rect2,Rect):
+			flipRect(rect2)
+		else:
+			flipNode(rect2)
 		sign = "|"
 
 	def printTest():
@@ -176,9 +189,34 @@ def optimizeTwoRectangles(rect1,rect2):
 
 	return sign;
 
+
+# Switch the height and width of a rectangle
 def flipRect(rect):
 	temp = rect.w
 	rect.w = rect.h
 	rect.h = temp
 	rect.flipped = not rect.flipped
+	return True
+
+# Recursively flip all componenents of a node (subnodes/modules)
+def flipNode(node):
+	# Update top level dimensions
+	temp = node.w
+	node.w = node.h
+	node.h = temp
+
+	if node.type=='rect':
+		flipRect(node.rect)
+		return True
+	elif node.type == '|':
+		node.type = '-'
+	else:
+		node.type = '|'
+
+	# Recursively update descendant nodes, including modules
+	if node.left is not None:
+		flipNode(node.left)
+	if node.right is not None:
+		flipNode(node.right)
+
 	return True

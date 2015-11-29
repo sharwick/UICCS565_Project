@@ -13,6 +13,7 @@ class Rect:
 		self.connections = 0
 		self.connectionsRatio = 0
 		self.flipped = False		
+		self.flag = False # Not used for a specific purpose.  Testing only.
 
 	def makePatch(self):
 		p = patches.Rectangle(
@@ -24,6 +25,10 @@ class Rect:
 	        	facecolor="#959595", 
 			)
 		return p
+	def printRect(self):
+		print(self.name + '|' + str(self.x) + '|' + str(self.y) + '|' + str(self.w) + '|' + str(self.h) + '|' + str(self.flipped))
+
+
 ########################################################################
 
 
