@@ -1,16 +1,8 @@
-#####
-import annealer
 import classes
-import metrics
 import numpy as np
-import parseData as pd
-#import templateToCallData as temp
+import utils
 
-<<<<<<< HEAD
-#print temp.matrix
 
-=======
->>>>>>> 0a288232ab9d41b2eafdf721fea5600db5d96f06
 # Finding midpoints of rectangles
 def findMid(rectangles):
 	
@@ -20,7 +12,7 @@ def findMid(rectangles):
 	
 	matrix_dist = np.zeros((length,length))
 	for r in range(length):
-		print('\n')
+		#print('\n')
 		midx1 = rectangles[r].x + rectangles[r].w/2
 		midy1 = rectangles[r].y + rectangles[r].h/2
 		#print (midx1,midy1)
@@ -30,9 +22,9 @@ def findMid(rectangles):
 			t+=1
 			#print(midx2,midy2)
 			matrix_dist[r][c] = abs(midx2 - midx1) + abs(midy2-midy1)	
-			print (matrix_dist[r][c]),
-	print('\n')
-	print(t)
+			#print (matrix_dist[r][c]),
+	#print('\n')
+	#print(t)
 	return (matrix_dist)
 
 	
@@ -54,7 +46,7 @@ def findMinY(rectangles):
 def findMaxX(rectangles):   
     maxx = 0
     for r in rectangles:
-        if(r.x > maxx):
+        if(r.x+r.w > maxx):
             maxx = r.x + r.w
             
     return maxx
@@ -62,7 +54,7 @@ def findMaxX(rectangles):
 def findMaxY(rectangles):   
     maxy = 0
     for r in rectangles:
-        if(r.y > maxy):
+        if(r.y +r.h> maxy):
             maxy = r.y + r.h
             
     return maxy
@@ -76,7 +68,7 @@ def getAreaFloorplan(rectangles): # total area of floor
     MAX_X = findMaxX(rectangles)
     MAX_Y = findMaxY(rectangles)
     tot_fp_area = (MAX_X - MIN_X) * (MAX_Y - MIN_Y)
-    print (tot_fp_area)
+    #print (tot_fp_area)
     return tot_fp_area
 
 def getCoverage(rectangles): # sum of individual areas
@@ -94,15 +86,18 @@ def getAreaRectangle(rectangleName): # rectangle name to rectangle area, need to
 	
     return 0
 
-<<<<<<< HEAD
+
 ################################################################################
 def costWithLamdas(rectangles, costParameters):
 	dist_matrix = (findMid(rectangles))
 	#print(dist_matrix)
+
 	sum_of_areas = (getCoverage(rectangles)) # sum of areas of individual rectangles
 	#print(sum_of_areas)
+	
 	total_area = (getAreaFloorplan(rectangles)) # total area of floorplan
 	#print(total_area)
+	
 	matrix = costParameters.lamda # connection matrix 
 	k = costParameters.k
 	alpha = costParameters.alpha
@@ -120,7 +115,7 @@ def costWithLamdas(rectangles, costParameters):
 	# Compute area based on new matrix
 	covered_area = (total_area - sum_of_areas)
 	whitespace = (sum_of_areas/total_area) *100
-	print(whitespace)
+	#print(whitespace)
 	cost = (alpha * total_area) *(1 - alpha)* cost_p2
 	return cost
 ################################################################################
@@ -134,11 +129,15 @@ def costWithLamdas(rectangles, costParameters):
 
 #print(manhattanDist(rectangles))
 
-=======
->>>>>>> 0a288232ab9d41b2eafdf721fea5600db5d96f06
 #############################################################################
 # Compute cost of a slicing tree based on overall area alone
 def costArea(root):
 	return root.w*root.h
+
+
+def costWithLamdasFromRoot(root, costParameters):
+	# construct new rectangles
+	rectangles = utils.getRectanglesFromRoot(root)
+	return costWithLamdas(rectangles, costParameters)
 
 

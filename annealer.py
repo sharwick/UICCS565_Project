@@ -121,7 +121,7 @@ def analyzeAllBenchmarks():
 	for dataset in utils.benchmarks:
 		print("Starting benchmark analysis: " + dataset)
 		anneal(dataset, annealingParameters,metrics.costArea)
-analyzeAllBenchmarks()
+#analyzeAllBenchmarks()
 #anneal(utils.benchmarks[0], annealingParameters,metrics.costArea)
 #anneal('ami49', annealingParameters,metrics.costArea)
 #anneal(utils.benchmarks[4], annealingParameters,metrics.costArea)

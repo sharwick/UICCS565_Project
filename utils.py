@@ -220,3 +220,19 @@ def flipNode(node):
 		flipNode(node.right)
 
 	return True
+
+# Obtain new list of rectangles from root (used for cost function)
+def getRectanglesFromRoot(root):
+	if root.type == 'rect':
+		return [root.rect]
+
+	rectangles = []
+
+	if root.left is not None:
+		rectangles += getRectanglesFromRoot(root.left)
+
+	if root.right is not None:
+		rectangles += getRectanglesFromRoot(root.right)
+
+	return rectangles
+
