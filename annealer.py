@@ -47,18 +47,21 @@ def anneal(dataset, annealingParameters, cost):
 	# Setup
 	start = time.time()
 	(initialSolution, rectangles, dictionary, matrix) = initializeMatchPairs(dataset)
+	count = 0
 
 	currentSolution = initialSolution
 	bestSolution = initialSolution
 	T = annealingParameters.T
 	M = 0
-	MT = 0
+	MT = 1
 	uphill = 0
 	n = len(rectangles)
 	N = annealingParameters.k * n
+	reject=0
+	timeDiff = time.time() - start
 
 	#Iterations
-	while uphill<=N and MT<=2*N:
+	while (reject/MT <= 1-annealingParameters.thresholdAccepted) and T>=annealingParameters.thresholdTemp and timeDiff<=annealingParameters.thresholdTime:
 
 		MT = 1 # start at 1 to avoid divide by 0
 		uphill = 0
@@ -66,11 +69,12 @@ def anneal(dataset, annealingParameters, cost):
 
 		timeDiff = time.time() - start
 
-		while (reject/MT <= 1-annealingParameters.thresholdAccepted) and T>=annealingParameters.thresholdTemp and timeDiff<=annealingParameters.thresholdTime:
-
+		
+		while uphill<=N and MT<=2*N:
 			newSolution = updateSolution(currentSolution,rectangles,dictionary)
 			#print(cost(newSolution))
-			#print(cost(bestSolution))
+			count+=1 # to track total iterations.  Should not be updated elsewhere.
+			
 
 			MT += 1
 			deltaCost = cost(newSolution) - cost(currentSolution)
@@ -88,6 +92,7 @@ def anneal(dataset, annealingParameters, cost):
 				reject += 1
 	
 			timeDiff = time.time() - start
+			print(dataset + ':  ' + str(count) + '= ' + str(cost(bestSolution)) + '  T=' + str(T) + '  timeDiff=' + str(timeDiff))
 
 		T = annealingParameters.r*T
 
@@ -116,6 +121,7 @@ def analyzeAllBenchmarks():
 	for dataset in utils.benchmarks:
 		print("Starting benchmark analysis: " + dataset)
 		anneal(dataset, annealingParameters,metrics.costArea)
-#analyzeAllBenchmarks()
+analyzeAllBenchmarks()
 #anneal(utils.benchmarks[0], annealingParameters,metrics.costArea)
+#anneal('ami49', annealingParameters,metrics.costArea)
 #anneal(utils.benchmarks[4], annealingParameters,metrics.costArea)

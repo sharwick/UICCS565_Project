@@ -89,7 +89,7 @@ def getAreaRectangle(rectangleName): # rectangle name to rectangle area, need to
 
 #print(getCoverage(rectangles))
 #print(getAreaFloorplan(rectangles))
-print(findMid(rectangles))
+#print(findMid(rectangles))
 
 #print(manhattanDist(rectangles))
 

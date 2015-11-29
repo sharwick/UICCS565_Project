@@ -101,8 +101,8 @@ class CostParameters:
 	# alpha = weight added to area
 	
 		def __init__(self,lamda,f,alpha):
-		self.lamda = lamda
-		self.f = f 
-		self.alpha = alpha
-		
-		return
+			self.lamda = lamda
+			self.f = f 
+			self.alpha = alpha
+			
+			return

@@ -63,8 +63,6 @@ def initializeMatchPairs(dataset):
 			node = RectNode(nodeI,nodeJ,type,None)
 			nodes.append(node)
 
-	print(dataset + '  ' + str(len(nodes)))
-
 	def printRectangleTest():
 		for r in rectangles:
 			print(r.name + '|' + str(r.x) + '|' + str(r.y) + '|' + str(r.w) + '|' + str(r.h))
@@ -73,8 +71,6 @@ def initializeMatchPairs(dataset):
 	# Given initial grouping of modules, construct a full slicing tree
 	while (len(nodes)>1):
 		length = len(nodes)
-		#print(dataset + '  ' + str(length))
-
 		newNodes = []
 
 		# sort the nodes
@@ -179,6 +175,6 @@ def initializeMatchPairs(dataset):
 def analyzeAllBenchmarks():
 	for dataset in utils.benchmarks:
 		initializeMatchPairs(dataset)
-analyzeAllBenchmarks()
+#analyzeAllBenchmarks()
 
 #initializeMatchPairs(utils.benchmarks[0])
