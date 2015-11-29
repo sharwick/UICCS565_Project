@@ -97,9 +97,9 @@ print(getCoverage(rectangles))
 #print(getAreaFloorplan(rectangles))
 #print(findMid(rectangles))
 
-
 #print(manhattanDist(rectangles))
 
+#print(manhattanDist(rectangles))
 
 #############################################################################
 # Compute cost of a slicing tree based on overall area alone

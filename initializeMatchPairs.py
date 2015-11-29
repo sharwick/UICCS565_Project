@@ -25,9 +25,15 @@ def initializeMatchPairs(dataset):
 		(i,j) = utils.getMaxOfMatrix(matrixWorkingCopy)
 
 		if i==j:
+			# end case, since this value has to be 0
 			node = RectNode(None,None,'rect',rectangles[i])
 			nodes.append(node)
-			matrixWorkingCopy[i,i] = -1
+			#matrixWorkingCopy[i,i] = -1
+
+			# Nullify considered modules
+			for k in range(len(rectangles)):
+				matrixWorkingCopy[i,k] = -1
+				matrixWorkingCopy[k,i] = -1
 
 		else:
 			rectI = rectangles[i]
@@ -44,36 +50,18 @@ def initializeMatchPairs(dataset):
 			newX = min(rectI.x,rectJ.x)
 			newY = min(rectI.y,rectJ.y)
 
-
-			#Default J to above I and then optimize
+			#Default I and J to same origin [will I need this?]
 			rectI.x = newX
 			rectI.y = newY
 			rectJ.x = newX
 			rectJ.y = newY
-			#rectJ.y = rectI.y + rectI.h
-
-			type = utils.optimizeTwoRectangles(rectI,rectJ)
-
-			def OLDVERSION():
-				verticalStackArea = max(rectI.w,rectJ.w)*(rectI.h+rectJ.h)
-				horizontalStackArea = max(rectI.h,rectJ.h)*(rectI.w+rectJ.w)
-				type = ''
-
-				if (verticalStackArea>horizontalStackArea):
-					newH = max(rectI.y,rectJ.y)
-					newW = rectI.w + rectJ.w
-					type = '-'
-
-				else:
-					newH = max(rectI.y,rectJ.y)
-					newW = rectI.w + rectJ.w
-					type = '|'				
+			
+			type = utils.optimizeTwoRectangles(rectI,rectJ)			
 
 			nodeI = RectNode(None,None,'rect',rectI)
 			nodeJ = RectNode(None,None,'rect',rectJ)
 			node = RectNode(nodeI,nodeJ,type,None)
 			nodes.append(node)
-
 
 	def printRectangleTest():
 		for r in rectangles:
@@ -93,31 +81,56 @@ def initializeMatchPairs(dataset):
 			left = nodes[i]
 			right = nodes[i+1]
 
-			# Choose split direction that will minimize area (unless it violates skewness)
-			verticalStackArea = max(left.w,right.w)*(left.h+right.h)
-			horizontalStackArea = max(left.h,right.h)*(left.w+right.w) 
-			stack = '|'
+			def newModuleMethod():
+				stack = utils.optimizeTwoRectangles(left,right)
+				return stack
 
-			if horizontalStackArea<verticalStackArea:
-				stack='-'
+			def oldModuleMethod():
+				# Choose split direction that will minimize area (unless it violates skewness)
+				verticalStackArea = max(left.w,right.w)*(left.h+right.h)
+				horizontalStackArea = max(left.h,right.h)*(left.w+right.w) 
+				stack = '|'
 
-			# Ensure that we are creating a skew tree
-			if right.type != 'rect':
-				if right.type == '-':
-					stack = '|'
-				else:
-					stack = '-'
+				if horizontalStackArea<verticalStackArea:
+					stack='-'
+				return stack
 
-			newNode = RectNode(nodes[i],nodes[i+1],stack,None)
+			#stack = oldModuleMethod()
+			stack = newModuleMethod()
+
+			def ensureSkew():
+				# Ensure that we are creating a skew tree
+				if right.type != 'rect':
+					if right.type == '-':
+						stack = '|'
+					else:
+						stack = '-'
+			ensureSkew()
+
+			newNode = RectNode(left,right,stack,None)
 			newNodes.append(newNode)
 		# Handle edge case where there is an unmatched odd node
 		if len(newNodes)*2<len(nodes):
-			newNodes.append(nodes[len(nodes)-1])
+			# Create new node with left = previous node and right = remaining node. This will prevent dangling node.
+			prevNode = newNodes[len(newNodes)-1]
+			remainingNode = nodes[len(nodes)-1]
+
+			if remainingNode.type == 'rect':
+				remainingNode.rect.flag = True
+			
+			#print(dataset + '  ' + remainingNode.type + '  ' + str(len(rectangles)))
+
+
+			newNode = RectNode(prevNode,remainingNode,prevNode.type,None)
+			newNodes.pop() # avoid duplicate rectangles
+			newNodes.append(newNode)
+			#newNodes.append(nodes[len(nodes)-1])
 
 		nodes = newNodes
 
 	root = nodes[0] # tree has been created
 
+	utils.resetRectangles(rectangles)
 	utils.updateTreeDimensions(root)
 
 	def printTest():
@@ -149,6 +162,11 @@ def initializeMatchPairs(dataset):
 	#printRect('bk10b')
 	#printRect('bk9b')
 
+	def printRectDetailsTest():
+		print(dataset)
+		for r in rectangles:
+			r.printRect()
+	#rectDetailsTest()
 
 	return (root, rectangles, dictionary, matrix)
 
@@ -157,6 +175,6 @@ def initializeMatchPairs(dataset):
 def analyzeAllBenchmarks():
 	for dataset in utils.benchmarks:
 		initializeMatchPairs(dataset)
-analyzeAllBenchmarks()
+#analyzeAllBenchmarks()
 
 #initializeMatchPairs(utils.benchmarks[0])

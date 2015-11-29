@@ -59,8 +59,11 @@ def printFloorplan(rectangles,outfile):
 
 	for j in range(len(rectangles)):
 		p = rectangles[j].makePatch()
-		#p.set_facecolor("#FF0000")
-		p.set_facecolor((rectangles[j].connectionsRatio,0,0))
+		p.set_facecolor("#FF0000")
+
+		if (rectangles[j].flag):
+			p.set_facecolor("00FF00")
+		#p.set_facecolor((rectangles[j].connectionsRatio,0,0))
 		#p.set_facecolor((1,0,0))
 		ax1.add_patch(p)
 
