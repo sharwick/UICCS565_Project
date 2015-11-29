@@ -120,7 +120,7 @@ def printDiagonal(dataset):
 	matrix = createConnectionMatrix(netlists,dictionary,rectangles)	
 
 	# Print rectangles
-	pf.printFloorplan(rectangles,"Output/"+dataset+".png")
+	pf.printFloorplan(rectangles,dataset,"Output/"+dataset+".png","Diagonalized Floorplan")
 
 
 ################################################################################################
@@ -145,7 +145,7 @@ def diagonalTest():
 	for ds in datasets:
 		printDiagonal(ds)
 
-diagonalTest()
+#diagonalTest()
 
 
 def check(ds):

@@ -2,60 +2,65 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 import numpy as np
 from classes import Rect
+import metrics
 
 def findMaxX(array):
-	max=0
+	maxValue=0
 
 	for r in array:
-		if (r.x+r.h>max):
-			max = r.x+r.h
+		if (r.x+r.w>maxValue):
+			maxValue = r.x+r.w
 
-	return max
+	return maxValue
 
 def findMaxY(array):
-	max=0
+	maxValue=0
 
 	for r in array:
-		if (r.y+r.h>max):
-			max = r.y+r.h
+		if (r.y+r.h>maxValue):
+			maxValue = r.y+r.h
 
-	return max
+	return maxValue
 
 def findMinX(array):
-	min=100000000
+	minValue=100000000
 
 	for r in array:
-		if (r.x<min):
-			min = r.x
+		if (r.x<minValue):
+			minValue = r.x
 		
-	return min
+	return minValue
 
 def findMinY(array):
-	min=100000000
+	minValue=100000000
 
 	for r in array:
-		if (r.y<min):
-			min = r.y
+		if (r.y<minValue):
+			minValue = r.y
 
-	return min	
+	return minValue	
 ########################################################################
 
 
 
 
-def printFloorplan(rectangles,outfile):
+def printFloorplan(rectangles,dataset, outfile,scenario):
 	MINX = findMinX(rectangles)
 	MAXX = findMaxX(rectangles)
 	MINY = findMinY(rectangles)
 	MAXY = findMaxY(rectangles)
 
+	#print(dataset + '|' + str(MINX) + '|' + str(MAXX) + '|' + str(MINY) + '|' + str(MAXY))
+
 
 	fig1 = plt.figure()
+	fig1.suptitle("Floorplan for "+dataset+' Benchmark\n'+scenario, fontsize=14, fontweight='bold')		
+
 	ax1 = fig1.add_subplot(111, aspect='equal')
 	ax1.set_xlim([MINX,MAXX])
 	ax1.set_ylim([MINY,MAXY])
-	#ax1.set_yticks([])
-	#ax1.set_xticks([])
+	ax1.set_yticks([])
+	ax1.set_xticks([])
 
 	for j in range(len(rectangles)):
 		p = rectangles[j].makePatch()
@@ -68,7 +73,13 @@ def printFloorplan(rectangles,outfile):
 		ax1.add_patch(p)
 
 
-		
+	coverage = metrics.getCoverage(rectangles)
+	coveragepct = (coverage*1.0)/(MAXX*MAXY)*100
+	#print(str(coverage))
+	#print(str(coveragepct))
+	#print(str(MAXX*MAXY))
+	ax1.set_xlabel('Area = ' + str(MAXX*MAXY) + ' = ' + str(MAXX) + ' x ' + str(MAXY) + '\nCoverage = ' + str("{0:.0f}%".format(coveragepct)))
+
 	fig1.savefig(outfile, dpi=90, bbox_inches='tight')
 
 
@@ -80,6 +91,6 @@ def test():
 
 	myRectangles = [R1,R2,R3,R4]
 
-	printFloorplan(myRectangles,'rect1.png')
+	printFloorplan(myRectangles,'rect1','rect1.png','Test')
 
 #test()

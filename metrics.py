@@ -6,8 +6,11 @@ import numpy as np
 import parseData as pd
 #import templateToCallData as temp
 
+<<<<<<< HEAD
 #print temp.matrix
 
+=======
+>>>>>>> 0a288232ab9d41b2eafdf721fea5600db5d96f06
 # Finding midpoints of rectangles
 def findMid(rectangles):
 	
@@ -81,16 +84,17 @@ def getCoverage(rectangles): # sum of individual areas
     tot_area = 0
     
     for r in rectangles:
-       print(r.name)
+       #print(r.name)
        area = r.w * r.h
        tot_area = tot_area + area 
-       print(tot_area)      
+       #print(tot_area)      
     return tot_area
 
 def getAreaRectangle(rectangleName): # rectangle name to rectangle area, need to call function "createDictionary" (in parseData)
 	
     return 0
 
+<<<<<<< HEAD
 ################################################################################
 def costWithLamdas(rectangles, costParameters):
 	dist_matrix = (findMid(rectangles))
@@ -130,6 +134,8 @@ def costWithLamdas(rectangles, costParameters):
 
 #print(manhattanDist(rectangles))
 
+=======
+>>>>>>> 0a288232ab9d41b2eafdf721fea5600db5d96f06
 #############################################################################
 # Compute cost of a slicing tree based on overall area alone
 def costArea(root):
