@@ -1,14 +1,13 @@
-import parseData as pd
+#####
+import annealer
+import classes
+import metrics
 import numpy as np
+import parseData as pd
+#import templateToCallData as temp
 
-rectangles = pd.createDiagonal('ami33')
+#print temp.matrix
 
-
-#print(rectangles[0].name)
-#print(rectangles[0].x)
-#print(rectangles[0].y)
-#print(rectangles[0].w)
-#print(rectangles[0].h)
 # Finding midpoints of rectangles
 def findMid(rectangles):
 	
@@ -73,9 +72,9 @@ def getAreaFloorplan(rectangles): # total area of floor
     MIN_Y = findMinY(rectangles)
     MAX_X = findMaxX(rectangles)
     MAX_Y = findMaxY(rectangles)
-    top_fp_area = (MAX_X - MIN_X) * (MAX_Y - MIN_Y)
-    print (top_fp_area)
-    return 0
+    tot_fp_area = (MAX_X - MIN_X) * (MAX_Y - MIN_Y)
+    print (tot_fp_area)
+    return tot_fp_area
 
 def getCoverage(rectangles): # sum of individual areas
     
@@ -92,8 +91,38 @@ def getAreaRectangle(rectangleName): # rectangle name to rectangle area, need to
 	
     return 0
 
-
-print(getCoverage(rectangles))
+################################################################################
+def costWithLamdas(rectangles, costParameters):
+	dist_matrix = (findMid(rectangles))
+	#print(dist_matrix)
+	sum_of_areas = (getCoverage(rectangles)) # sum of areas of individual rectangles
+	total_area = (getAreaFloorplan(rectangles)) # total area of floorplan
+	matrix = costParameters.lamda # connection matrix 
+	k = costParameters.k
+	alpha = costParameters.alpha
+	dist_matrix = (findMid(rectangles)) # wirelength matrix
+	leng = len(matrix)
+	matrix_cost = np.zeros((leng,leng))
+	cost_p2 = 0
+	
+	for k in range (1,3):
+		for	l in range(leng):
+			for m in range(leng):
+				matrix[i][j]*=matri[i][j]
+	for i in range(leng):
+		for j in range(leng):
+			f[i][j] = 1
+			matrix_cost[i][j]=(f[i][j]*matrix[i][j]*dist_matrix[i][j])
+			cost_p2 += matrixcost[i][j]
+	# Compute area based on new matrix
+	covered_area = total_area - sum_of_areas
+	whitespace = (sum_of_areas/total_area) *100
+	cost = (alpha * total_area) + (1 - alpha)* cost_p2
+	return cost
+################################################################################
+	
+	
+#print(getCoverage(rectangles))
 #print(getAreaFloorplan(rectangles))
 #print(findMid(rectangles))
 

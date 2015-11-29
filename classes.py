@@ -94,15 +94,16 @@ class AnnealingParameters:
 		return  
 		
 
-class CostParameters:
+class costParameters:
 	# lamda = number of connections between two modules i and j
 	# f = parameter measuring frequency of communication between two modules i and j
 	# alpha = weight added to area
 
-	def __init__(self,lamda,f,alpha):
+	def __init__(self,lamda,f,alpha,k):
 		self.lamda = lamda
 		self.f = f 
 		self.alpha = alpha
+		self.k = k
 		return 
 	
 

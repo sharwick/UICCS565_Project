@@ -13,7 +13,7 @@ print(dictionary)
 print("\n\nConnections Matrix\n\n")
 print(matrix)
 
-
+#print(rectangles[0].x)
 
 
 def costWithLamdas(rectangles, costParameters):
