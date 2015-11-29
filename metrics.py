@@ -1,4 +1,5 @@
 import parseData as pd
+import numpy as np
 
 rectangles = pd.createDiagonal('ami33')
 
@@ -10,22 +11,27 @@ rectangles = pd.createDiagonal('ami33')
 #print(rectangles[0].h)
 # Finding midpoints of rectangles
 def findMid(rectangles):
+	
 	t = 0
-	for r in rectangles:
+	length = len(rectangles)
+	#c = len(rectangles)
+	
+	matrix_dist = np.zeros((length,length))
+	for r in range(length):
 		print('\n')
-		midx1 = r.x + (r.w)/2
-		midy1 = r.y + (r.h)/2
+		midx1 = rectangles[r].x + rectangles[r].w/2
+		midy1 = rectangles[r].y + rectangles[r].h/2
 		#print (midx1,midy1)
-		for j in rectangles:
-			midx2 = j.x + (j.w)/2
-			midy2 = j.y + (j.h)/2
+		for c in range(length):
+			midx2 = rectangles[c].x + rectangles[c].w/2
+			midy2 = rectangles[c].y + rectangles[c].h/2
 			t+=1
 			#print(midx2,midy2)
-			d = abs(midx2 - midx1) + abs(midy2-midy1)	
-			print d,
+			matrix_dist[r][c] = abs(midx2 - midx1) + abs(midy2-midy1)	
+			print (matrix_dist[r][c]),
 	print('\n')
 	print(t)
-	return (d)
+	return (matrix_dist)
 
 	
 	
@@ -87,13 +93,12 @@ def getAreaRectangle(rectangleName): # rectangle name to rectangle area, need to
     return 0
 
 
-#print(getCoverage(rectangles))
+print(getCoverage(rectangles))
 #print(getAreaFloorplan(rectangles))
-print(findMid(rectangles))
+#print(findMid(rectangles))
+
 
 #print(manhattanDist(rectangles))
-
-
 
 
 #############################################################################
