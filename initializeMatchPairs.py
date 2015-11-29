@@ -22,7 +22,6 @@ def initializeMatchPairs(dataset):
 	nodes = []
 
 	while np.max(matrixWorkingCopy) > -1:
-		#print(utils.getMaxOfMatrix(matrixWorkingCopy)) # TEST
 		(i,j) = utils.getMaxOfMatrix(matrixWorkingCopy)
 
 		if i==j:
@@ -45,34 +44,41 @@ def initializeMatchPairs(dataset):
 			newX = min(rectI.x,rectJ.x)
 			newY = min(rectI.y,rectJ.y)
 
-			verticalStackArea = max(rectI.w,rectJ.w)*(rectI.h+rectJ.h)
-			horizontalStackArea = max(rectI.h,rectJ.h)*(rectI.w+rectJ.w)
-			type = ''
 
-			if (verticalStackArea>horizontalStackArea):
-				newH = max(rectI.y,rectJ.y)
-				newW = rectI.w + rectJ.w
-				type = '-'
+			#Default J to above I and then optimize
+			rectI.x = newX
+			rectI.y = newY
+			rectJ.x = newX
+			rectJ.y = newY
+			#rectJ.y = rectI.y + rectI.h
 
-				# Modify the existing rectangles (i.e., move j)
-				#rectJ.x = rectI.x+rectI.w
-				#rectJ.y = rectI.y
-				
-			else:
-				newH = max(rectI.y,rectJ.y)
-				newW = rectI.w + rectJ.w
-				type = '|'
+			type = utils.optimizeTwoRectangles(rectI,rectJ)
 
-				# Modify the existing rectangles (i.e., move j)
-				#rectJ.x = rectI.x
-				#rectJ.y = rectI.y+rectI.h
-				
+			def OLDVERSION():
+				verticalStackArea = max(rectI.w,rectJ.w)*(rectI.h+rectJ.h)
+				horizontalStackArea = max(rectI.h,rectJ.h)*(rectI.w+rectJ.w)
+				type = ''
+
+				if (verticalStackArea>horizontalStackArea):
+					newH = max(rectI.y,rectJ.y)
+					newW = rectI.w + rectJ.w
+					type = '-'
+
+				else:
+					newH = max(rectI.y,rectJ.y)
+					newW = rectI.w + rectJ.w
+					type = '|'				
 
 			nodeI = RectNode(None,None,'rect',rectI)
 			nodeJ = RectNode(None,None,'rect',rectJ)
 			node = RectNode(nodeI,nodeJ,type,None)
 			nodes.append(node)
 
+
+	def printRectangleTest():
+		for r in rectangles:
+			print(r.name + '|' + str(r.x) + '|' + str(r.y) + '|' + str(r.w) + '|' + str(r.h))
+	#printRectangleTest()
 
 	# Given initial grouping of modules, construct a full slicing tree
 	while (len(nodes)>1):
@@ -101,7 +107,6 @@ def initializeMatchPairs(dataset):
 					stack = '|'
 				else:
 					stack = '-'
-
 
 			newNode = RectNode(nodes[i],nodes[i+1],stack,None)
 			newNodes.append(newNode)
@@ -133,6 +138,18 @@ def initializeMatchPairs(dataset):
 
 	pfp.printFloorplan(rectangles,"Output/initialMatchPairs_" + dataset + ".png")
 
+
+	def printRect(rect):
+		print(rect)
+		print(rectangles[dictionary[rect]].x)
+		print(rectangles[dictionary[rect]].y)
+		print(rectangles[dictionary[rect]].w)
+		print(rectangles[dictionary[rect]].h)
+
+	#printRect('bk10b')
+	#printRect('bk9b')
+
+
 	return (root, rectangles, dictionary, matrix)
 
 
@@ -140,6 +157,6 @@ def initializeMatchPairs(dataset):
 def analyzeAllBenchmarks():
 	for dataset in utils.benchmarks:
 		initializeMatchPairs(dataset)
-#analyzeAllBenchmarks()
+analyzeAllBenchmarks()
 
-initializeMatchPairs(utils.benchmarks[0])
+#initializeMatchPairs(utils.benchmarks[0])

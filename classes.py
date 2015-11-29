@@ -12,6 +12,7 @@ class Rect:
 		self.name = name
 		self.connections = 0
 		self.connectionsRatio = 0
+		self.flipped = False		
 
 	def makePatch(self):
 		p = patches.Rectangle(
