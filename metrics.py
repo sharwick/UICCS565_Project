@@ -96,28 +96,28 @@ def costWithLamdas(rectangles, costParameters):
 	dist_matrix = (findMid(rectangles))
 	#print(dist_matrix)
 	sum_of_areas = (getCoverage(rectangles)) # sum of areas of individual rectangles
+	#print(sum_of_areas)
 	total_area = (getAreaFloorplan(rectangles)) # total area of floorplan
+	#print(total_area)
 	matrix = costParameters.lamda # connection matrix 
 	k = costParameters.k
 	alpha = costParameters.alpha
 	dist_matrix = (findMid(rectangles)) # wirelength matrix
-	leng = len(matrix)
+	leng = len(dist_matrix)
 	matrix_cost = np.zeros((leng,leng))
+	f = np.zeros((leng,leng))
 	cost_p2 = 0
 	
-	for k in range (1,3):
-		for	l in range(leng):
-			for m in range(leng):
-				matrix[i][j]*=matri[i][j]
 	for i in range(leng):
 		for j in range(leng):
-			f[i][j] = 1
-			matrix_cost[i][j]=(f[i][j]*matrix[i][j]*dist_matrix[i][j])
-			cost_p2 += matrixcost[i][j]
+			#f[i][j] = 1
+			matrix_cost[i][j]=(matrix[i][j]*dist_matrix[i][j])
+			cost_p2 += matrix_cost[i][j]
 	# Compute area based on new matrix
-	covered_area = total_area - sum_of_areas
+	covered_area = (total_area - sum_of_areas)
 	whitespace = (sum_of_areas/total_area) *100
-	cost = (alpha * total_area) + (1 - alpha)* cost_p2
+	print(whitespace)
+	cost = (alpha * total_area) *(1 - alpha)* cost_p2
 	return cost
 ################################################################################
 	
