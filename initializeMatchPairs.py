@@ -149,7 +149,7 @@ def initializeMatchPairs(dataset):
 		print(utils.getPolishArray(newTree))
 	#checkPolishArray()
 
-	pfp.printFloorplan(rectangles,"Output/initialMatchPairs_" + dataset + ".png")
+	pfp.printFloorplan(rectangles,dataset,"Output/initialMatchPairs_" + dataset + ".png",'Initial Floorplan')
 
 
 	def printRect(rect):
@@ -175,6 +175,6 @@ def initializeMatchPairs(dataset):
 def analyzeAllBenchmarks():
 	for dataset in utils.benchmarks:
 		initializeMatchPairs(dataset)
-#analyzeAllBenchmarks()
+analyzeAllBenchmarks()
 
 #initializeMatchPairs(utils.benchmarks[0])

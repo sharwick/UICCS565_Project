@@ -109,7 +109,7 @@ def anneal(dataset, annealingParameters, cost):
 	constructNewRectangleMatrix(bestSolution)
 
 	print("Total area for " + dataset + " = " + str(bestSolution.w*bestSolution.h))
-	pfp.printFloorplan(newRectangles,'Output/annealing_' + dataset + '.png')
+	pfp.printFloorplan(newRectangles,dataset,'Output/annealing_' + dataset + '.png','Annealed Floorplan')
 
 	return (bestSolution, rectangles, dictionary, matrix)
 

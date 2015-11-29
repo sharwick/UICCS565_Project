@@ -1,14 +1,6 @@
 import parseData as pd
 import numpy as np
 
-rectangles = pd.createDiagonal('ami33')
-
-
-#print(rectangles[0].name)
-#print(rectangles[0].x)
-#print(rectangles[0].y)
-#print(rectangles[0].w)
-#print(rectangles[0].h)
 # Finding midpoints of rectangles
 def findMid(rectangles):
 	
@@ -82,24 +74,15 @@ def getCoverage(rectangles): # sum of individual areas
     tot_area = 0
     
     for r in rectangles:
-       print(r.name)
+       #print(r.name)
        area = r.w * r.h
        tot_area = tot_area + area 
-       print(tot_area)      
+       #print(tot_area)      
     return tot_area
 
 def getAreaRectangle(rectangleName): # rectangle name to rectangle area, need to call function "createDictionary" (in parseData)
 	
     return 0
-
-
-print(getCoverage(rectangles))
-#print(getAreaFloorplan(rectangles))
-#print(findMid(rectangles))
-
-#print(manhattanDist(rectangles))
-
-#print(manhattanDist(rectangles))
 
 #############################################################################
 # Compute cost of a slicing tree based on overall area alone
