@@ -132,6 +132,7 @@ def costArea(root):
 def costWithLamdasFromRoot(root, costParameters):
 	# construct new rectangles
 	rectangles = utils.getRectanglesFromRoot(root)
+	#print("Length of rectangles = " + str(len(rectangles)))
 	return costWithLamdas(rectangles, costParameters)
 
 

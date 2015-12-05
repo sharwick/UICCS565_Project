@@ -81,6 +81,7 @@ def printFloorplan(rectangles,dataset, outfile,scenario):
 	ax1.set_xlabel('Area = ' + str(MAXX*MAXY) + ' = ' + str(MAXX) + ' x ' + str(MAXY) + '\nCoverage = ' + str("{0:.0f}%".format(coveragepct)))
 
 	fig1.savefig(outfile, dpi=90, bbox_inches='tight')
+	plt.close('all')
 
 
 def test():

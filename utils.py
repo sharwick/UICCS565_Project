@@ -95,6 +95,28 @@ def _updateTreeDimensionsHelper(root,wAdj,hAdj):
 		root.rect.y += hAdj
 		return
 
+
+	# Handle the fit in modules
+	if root.fitRect is not None:
+		wAdjFitRect = wAdj
+		hAdjFitRect = hAdj
+
+		if root.type == '|':
+			if root.left.h>=root.right.h:
+				wAdjFitRect += root.left.w
+				hAdjFitRect += root.right.h
+			else:
+				wAdjFitRect += 0
+				hAdjFitRect += root.left.h
+		elif root.type == '-':
+			if root.left.w>=root.right.w:
+				wAdjFitRect += root.left.w
+				hAdjFitRect += root.right.h
+			else:
+				wAdjFitRect += root.left.w
+				hAdjFitRect += 0
+		_updateTreeDimensionsHelper(root.fitRect,wAdjFitRect,hAdjFitRect)
+
 	# Recursive calls - adjust the right branch with the dimensions of the left/bottom branch
 	if root.left is not None:
 		_updateTreeDimensionsHelper(root.left,wAdj,hAdj)
@@ -227,6 +249,9 @@ def getRectanglesFromRoot(root):
 		return [root.rect]
 
 	rectangles = []
+
+	if root.fitRect is not None:
+		rectangles += getRectanglesFromRoot(root.fitRect)
 
 	if root.left is not None:
 		rectangles += getRectanglesFromRoot(root.left)

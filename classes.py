@@ -28,6 +28,9 @@ class Rect:
 	def printRect(self):
 		print(self.name + '|' + str(self.x) + '|' + str(self.y) + '|' + str(self.w) + '|' + str(self.h) + '|' + str(self.flipped))
 
+	def getArea(self):
+		return self.w*self.h
+
 
 ########################################################################
 
@@ -41,8 +44,10 @@ class RectNode:
 		self.parent = None
 		self.w = None
 		self.h = None
-		self.whiteAspect = 0
+		#self.whiteAspect = 0
+		self.whiteArea = 0
 		self.whiteLength = 0
+		self.fitRect = None
 
 		if type=='rect':
 			self.w = self.rect.w
@@ -68,13 +73,26 @@ class RectNode:
 				self.w = wL+wR
 				self.h = max(hL,hR)
 
+				if (hL>=hR):
+					self.whiteArea = wR*(hL-hR)
+					self.whiteLength = max(wR,hL-hR)
+				else:
+					self.whiteArea = wL*(hR-hL)
+					self.whiteLength = max(wL,hR-hL)
+				
+
 			if type=='-':
 				self.w = max(wL,wR)
 				self.h = hL+hR
 
-			self.whiteLength = max(self.w,self.h)
-			self.whiteAspect = self.whiteLength/min(self.w,self.h)
+				if (wL>=wR):
+					self.whiteArea = hR*(wL-wR)
+					self.whiteLength = max(hR,wL-wR)
+				else:
+					self.whiteArea = hL*(wR-wL)
+					self.whiteLength = max(hL,wR-wL)
 
+			
 	def getArea(self):
 		if self.w is not None and self.h is not None:
 			return self.w*self.h
