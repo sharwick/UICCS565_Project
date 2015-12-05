@@ -41,6 +41,8 @@ class RectNode:
 		self.parent = None
 		self.w = None
 		self.h = None
+		self.whiteAspect = 0
+		self.whiteLength = 0
 
 		if type=='rect':
 			self.w = self.rect.w
@@ -65,9 +67,13 @@ class RectNode:
 			if type=='|':
 				self.w = wL+wR
 				self.h = max(hL,hR)
+
 			if type=='-':
 				self.w = max(wL,wR)
 				self.h = hL+hR
+
+			self.whiteLength = max(self.w,self.h)
+			self.whiteAspect = self.whiteLength/min(self.w,self.h)
 
 	def getArea(self):
 		if self.w is not None and self.h is not None:
@@ -99,11 +105,12 @@ class CostParameters:
 	# f = parameter measuring frequency of communication between two modules i and j
 	# alpha = weight added to area
 
-	def __init__(self,f,alpha,k,lamda):
+	def __init__(self,f,alpha,k,lamda,dictionary):
 		self.lamda = lamda
 		self.f = f 
 		self.alpha = alpha
 		self.k = k
+		self.dictionary = dictionary
 		return 
 	
 

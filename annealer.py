@@ -41,7 +41,7 @@ def updateSolution(root,rectangles,dictionary):
 	return newRoot;
 
 
-def anneal(dataset, annealingParameters, cost):
+def anneal(dataset, annealingParameters, cost, outputPrefix,scenario):
 	# Solutions will be represented by roots to a slicing tree
 
 	# Setup
@@ -109,7 +109,7 @@ def anneal(dataset, annealingParameters, cost):
 	constructNewRectangleMatrix(bestSolution)
 
 	print("Total area for " + dataset + " = " + str(bestSolution.w*bestSolution.h))
-	pfp.printFloorplan(newRectangles,dataset,'Output/annealing_' + dataset + '.png','Annealed Floorplan')
+	pfp.printFloorplan(newRectangles,dataset,outputPrefix + dataset + '.png',scenario)
 
 	return (bestSolution, rectangles, dictionary, matrix)
 

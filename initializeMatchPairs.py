@@ -151,23 +151,6 @@ def initializeMatchPairs(dataset):
 
 	pfp.printFloorplan(rectangles,dataset,"Output/initialMatchPairs_" + dataset + ".png",'Initial Floorplan')
 
-
-	def printRect(rect):
-		print(rect)
-		print(rectangles[dictionary[rect]].x)
-		print(rectangles[dictionary[rect]].y)
-		print(rectangles[dictionary[rect]].w)
-		print(rectangles[dictionary[rect]].h)
-
-	#printRect('bk10b')
-	#printRect('bk9b')
-
-	def printRectDetailsTest():
-		print(dataset)
-		for r in rectangles:
-			r.printRect()
-	#rectDetailsTest()
-
 	return (root, rectangles, dictionary, matrix)
 
 
@@ -175,6 +158,6 @@ def initializeMatchPairs(dataset):
 def analyzeAllBenchmarks():
 	for dataset in utils.benchmarks:
 		initializeMatchPairs(dataset)
-analyzeAllBenchmarks()
+#analyzeAllBenchmarks()
 
 #initializeMatchPairs(utils.benchmarks[0])

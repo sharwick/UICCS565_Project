@@ -4,28 +4,25 @@ import utils
 
 
 # Finding midpoints of rectangles
-def findMid(rectangles):
+def findMid(rectangles,dictionary):
 	
-	t = 0
 	length = len(rectangles)
-	#c = len(rectangles)
 	
 	matrix_dist = np.zeros((length,length))
+
 	for r in range(length):
-		#print('\n')
+		indexI = dictionary[rectangles[r].name]
 		midx1 = rectangles[r].x + rectangles[r].w/2
 		midy1 = rectangles[r].y + rectangles[r].h/2
-		#print (midx1,midy1)
+
 		for c in range(length):
+			indexJ = dictionary[rectangles[c].name]
 			midx2 = rectangles[c].x + rectangles[c].w/2
 			midy2 = rectangles[c].y + rectangles[c].h/2
-			t+=1
-			#print(midx2,midy2)
-			matrix_dist[r][c] = abs(midx2 - midx1) + abs(midy2-midy1)	
-			#print (matrix_dist[r][c]),
-	#print('\n')
-	#print(t)
-	return (matrix_dist)
+
+			matrix_dist[indexI][indexJ] = abs(midx2 - midx1) + abs(midy2-midy1)	
+
+	return matrix_dist
 
 	
 	
@@ -89,34 +86,31 @@ def getAreaRectangle(rectangleName): # rectangle name to rectangle area, need to
 
 ################################################################################
 def costWithLamdas(rectangles, costParameters):
-	dist_matrix = (findMid(rectangles))
-	#print(dist_matrix)
-
 	sum_of_areas = (getCoverage(rectangles)) # sum of areas of individual rectangles
-	#print(sum_of_areas)
-	
 	total_area = (getAreaFloorplan(rectangles)) # total area of floorplan
-	#print(total_area)
 	
 	matrix = costParameters.lamda # connection matrix 
 	k = costParameters.k
 	alpha = costParameters.alpha
-	dist_matrix = (findMid(rectangles)) # wirelength matrix
-	leng = len(dist_matrix)
-	matrix_cost = np.zeros((leng,leng))
-	f = np.zeros((leng,leng))
-	cost_p2 = 0
-	
+	f = costParameters.f
+	dictionary = costParameters.dictionary
+	dist_matrix = (findMid(rectangles,dictionary)) # wirelength matrix
+
+
+	leng = len(rectangles)
+	cost_p2 = 0.0
+	matrix_cost = np.multiply(matrix,dist_matrix)
+
+	#print(dist_matrix)
+
 	for i in range(leng):
-		for j in range(leng):
+		for j in xrange(i+1,leng,1):  # Avoid duplicating costs
 			#f[i][j] = 1
-			matrix_cost[i][j]=(matrix[i][j]*dist_matrix[i][j])
-			cost_p2 += matrix_cost[i][j]
-	# Compute area based on new matrix
-	covered_area = (total_area - sum_of_areas)
-	whitespace = (sum_of_areas/total_area) *100
-	#print(whitespace)
-	cost = (alpha * total_area) *(1 - alpha)* cost_p2
+			#matrix_cost[i,j]=matrix[i,j]*dist_matrix[i,j]*1.0
+			cost_p2 += (matrix_cost[i,j]) ** k
+
+	# Compute cost based on new matrix
+	cost = (alpha * total_area) + (1 - alpha)* cost_p2
 	return cost
 ################################################################################
 	
