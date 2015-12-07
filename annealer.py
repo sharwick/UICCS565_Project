@@ -21,11 +21,11 @@ annealingParameters = classes.AnnealingParameters(100,.85,5,.05,1,1)
 def updateSolutionRandomChain(root,rectangles,dictionary):
 	polishArray = utils.getPolishArray(root)
 
-	# Choose random number from 0 to n-2
-	m = random.randint(0,len(rectangles)-2)
-	n = random.randint(m,len(rectangles)-2)
+	# Choose random number from 0 to n-2 (for n modules, there are n-1 operators and indices thus range over [0,n-1-1])
+	m = random.randint(0,len(rectangles)-1-1)
+	n = random.randint(m,len(rectangles)-1-1)
 	count = -1
-	index = 0
+	index = -1
 
 	while (count<n):
 		index += 1 # must increment from previous round
@@ -35,7 +35,7 @@ def updateSolutionRandomChain(root,rectangles,dictionary):
 
 		count += 1
 
-		if (count>m):
+		if (count>=m):
 			if polishArray[index] == '-':
 				polishArray[index] = '|'
 			else:
@@ -46,7 +46,7 @@ def updateSolutionRandomChain(root,rectangles,dictionary):
 	return newRoot;
 
 #####################################################################################################################
-# Find a node where the right node can fit within the white space of the left and collapse that subtree 1 node
+# METHOD 2: Find a node where the right node can fit within the white space of the left and collapse that subtree 1 node
 def updateSolutionFitNode(root,rectangles,dictionary):
 	newRoot = deepcopy(root)
 
@@ -106,16 +106,59 @@ def fitRightInLeft(node):
 
 	return False
 #####################################################################################################################
+# METHOD 3: Swap 2 random operands
+def updateSwapOperands(root,rectangles,dictionary):
+	polishArray = utils.getPolishArray(root)
+
+	# Choose random number from 0 to n-1.  
+	m = random.randint(0,len(rectangles)-1)
+
+	# Ensure they are unequal.
+	n = random.randint(0,len(rectangles)-2)
+	if n>=m:
+		n = n+1
+
+	count = -1
+	index = -1
+	indexM = -1
+	indexN = -1
+
+	# Find the indices in the polishArray for the mth and nth operand
+	while (count<n or count<m):
+		index += 1 # must increment from previous round
+
+		while polishArray[index] == '-' or polishArray[index] == '|':
+			index += 1
+
+		count += 1
+
+		if count==m:
+			indexM = index
+		elif count==n:
+			indexN = index
+
+	
+	# Swap operands
+	temp = polishArray[indexM]
+	polishArray[indexM] = polishArray[indexN]
+	polishArray[indexN] = temp
+
+	# Construct new tree of nodes from the new polish expression
+	newRoot = utils.getTreeFromPolishArray(polishArray,rectangles,dictionary)
+
+	return newRoot;
 
 
 
+#####################################################################################################################
+#####################################################################################################################
 
-
+# This function is the annealer
 def anneal(dataset, annealingParameters, cost, outputPrefix,scenario):
 	# Solutions will be represented by roots to a slicing tree
 
 	# Setup
-	updateMethods = [updateSolutionRandomChain,updateSolutionFitNode]
+	updateMethods = [updateSolutionRandomChain,updateSolutionFitNode,updateSwapOperands]
 	#updateMethods = [updateSolutionRandomChain]
 	start = time.time()
 	(initialSolution, rectangles, dictionary, matrix) = initializeMatchPairs(dataset)
