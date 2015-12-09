@@ -14,11 +14,14 @@ import printFloorplan as pfp
 
 annealingParameters = classes.AnnealingParameters(100,.85,5,.05,1,1)
 
+(countChain,countFit,countFlip) = (0,0,0)
 
 
 #####################################################################################################################
 # METHOD 1: Flip a random chain (random length) of operators
 def updateSolutionRandomChain(root,rectangles,dictionary):
+	flagChain = 1
+
 	polishArray = utils.getPolishArray(root)
 
 	# Choose random number from 0 to n-2 (for n modules, there are n-1 operators and indices thus range over [0,n-1-1])
@@ -48,6 +51,8 @@ def updateSolutionRandomChain(root,rectangles,dictionary):
 #####################################################################################################################
 # METHOD 2: Find a node where the right node can fit within the white space of the left and collapse that subtree 1 node
 def updateSolutionFitNode(root,rectangles,dictionary):
+	flagFit = 1
+
 	newRoot = deepcopy(root)
 
 
@@ -108,6 +113,8 @@ def fitRightInLeft(node):
 #####################################################################################################################
 # METHOD 3: Swap 2 random operands
 def updateSwapOperands(root,rectangles,dictionary):
+	flagSwap = 1
+
 	polishArray = utils.getPolishArray(root)
 
 	# Choose random number from 0 to n-1.  
@@ -146,8 +153,21 @@ def updateSwapOperands(root,rectangles,dictionary):
 	# Construct new tree of nodes from the new polish expression
 	newRoot = utils.getTreeFromPolishArray(polishArray,rectangles,dictionary)
 
-	return newRoot;
+	return newRoot
 
+#####################################################################################################################
+# METHOD 4: Randomly rotate left or right child
+def updateFlipNode(root,rectangles,dictionary):
+	newRoot = deepcopy(root)
+
+	r = random.randint(0,1)
+
+	if r==0 and newRoot.left is not None:
+		utils.flipNode(newRoot.left)
+	elif newRoot.right is not None:
+		utils.flipNode(newRoot.right)
+
+	return newRoot
 
 
 #####################################################################################################################
@@ -158,7 +178,8 @@ def anneal(dataset, annealingParameters, cost, outputPrefix,scenario):
 	# Solutions will be represented by roots to a slicing tree
 
 	# Setup
-	updateMethods = [updateSolutionRandomChain,updateSolutionFitNode,updateSwapOperands]
+
+	updateMethods = [updateSolutionRandomChain,updateSolutionFitNode,updateSwapOperands,updateFlipNode]
 	#updateMethods = [updateSolutionRandomChain]
 	start = time.time()
 	(initialSolution, rectangles, dictionary, matrix) = initializeMatchPairs(dataset)
@@ -177,7 +198,7 @@ def anneal(dataset, annealingParameters, cost, outputPrefix,scenario):
 
 	#Iterations
 	while (reject/MT <= 1-annealingParameters.thresholdAccepted) and T>=annealingParameters.thresholdTemp and timeDiff<=annealingParameters.thresholdTime:
-
+		(flagChain,flagFit,flagFlip) = (0,0,0)
 		MT = 1 # start at 1 to avoid divide by 0
 		uphill = 0
 		reject = 0
@@ -186,8 +207,6 @@ def anneal(dataset, annealingParameters, cost, outputPrefix,scenario):
 
 		
 		while uphill<=N and MT<=2*N:
-			#newSolution = updateSolutionRandomChain(currentSolution,rectangles,dictionary)
-			#newSolution = updateSolutionFitNode(currentSolution,rectangles,dictionary)
 
 			# randomly choose which method to use for updating
 			randomIndex = random.randint(0,len(updateMethods)-1)
@@ -201,6 +220,7 @@ def anneal(dataset, annealingParameters, cost, outputPrefix,scenario):
 
 			# Updates
 			if deltaCost <= 0 or random.uniform(0,1) < math.exp(-deltaCost/T):
+
 				if deltaCost>0:
 					uphill += 1
 
@@ -234,6 +254,7 @@ def anneal(dataset, annealingParameters, cost, outputPrefix,scenario):
 	constructNewRectangleMatrix(bestSolution)
 
 	print("Total area for " + dataset + " = " + str(bestSolution.w*bestSolution.h))
+	print("(countChain,countFit,countFlip)="+str((countChain,countFit,countFlip)))
 	pfp.printFloorplan(newRectangles,dataset,outputPrefix + dataset + '.png',scenario)
 
 	return (bestSolution, rectangles, dictionary, matrix)
