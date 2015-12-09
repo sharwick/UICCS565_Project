@@ -7,8 +7,8 @@ import utils
 import numpy as np
 from copy import copy, deepcopy
 
-annealingParameters = classes.AnnealingParameters(100,.85,5,.05,1,1)
-
+#annealingParameters = classes.AnnealingParameters(100,.85,5,.05,1,1)
+annealingParameters = classes.AnnealingParameters(100,.9,5,.05,100,1)
 
 def analyzeAllBenchmarks():
 	for dataset in utils.benchmarks:
@@ -21,7 +21,7 @@ def analyzeAllBenchmarks():
 		# Anneal - Consider area and connections
 		length = len(rectangles)
 		lambdas = copy(matrix)
-		costParameters = classes.CostParameters(np.ones((length,length)),0.5,1,lambdas,dictionary)
+		costParameters = classes.CostParameters(np.ones((length,length)),0.5,2,lambdas,dictionary)
 
 		# Curry cost function
 		def newCost(inRoot):
