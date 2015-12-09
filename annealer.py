@@ -159,6 +159,7 @@ def updateSwapOperands(root,rectangles,dictionary):
 # METHOD 4: Randomly rotate left or right child
 def updateFlipNode(root,rectangles,dictionary):
 	newRoot = deepcopy(root)
+	#newRoot = root
 
 	r = random.randint(0,1)
 
@@ -166,6 +167,18 @@ def updateFlipNode(root,rectangles,dictionary):
 		utils.flipNode(newRoot.left)
 	elif newRoot.right is not None:
 		utils.flipNode(newRoot.right)
+
+	# Adjust parent node dimensions
+	if newRoot.type == '|':
+		newRoot.w = newRoot.left.w + newRoot.right.w
+		newRoot.h = max(newRoot.left.h,newRoot.right.h)
+	else:
+		newRoot.h = newRoot.left.h + newRoot.right.h
+		newRoot.w = max(newRoot.left.w,newRoot.right.w)
+
+	rectangles = utils.getRectanglesFromRoot(newRoot)
+	utils.resetRectangles(rectangles)
+	utils.updateTreeDimensions(newRoot)
 
 	return newRoot
 
@@ -179,7 +192,9 @@ def anneal(dataset, annealingParameters, cost, outputPrefix,scenario):
 
 	# Setup
 
-	updateMethods = [updateSolutionRandomChain,updateSolutionFitNode,updateSwapOperands,updateFlipNode]
+	updateMethods = [updateSolutionRandomChain,updateSwapOperands]
+	#updateMethods = [updateSolutionRandomChain,updateSwapOperands,updateFlipNode]
+	#updateMethods = [updateSolutionRandomChain,updateSolutionFitNode,updateSwapOperands,updateFlipNode]
 	#updateMethods = [updateSolutionRandomChain]
 	start = time.time()
 	(initialSolution, rectangles, dictionary, matrix) = initializeMatchPairs(dataset)

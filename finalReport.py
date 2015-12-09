@@ -8,8 +8,9 @@ import numpy as np
 from copy import copy, deepcopy
 import random
 
-annealingParameters = classes.AnnealingParameters(100,.85,5,.05,1,1)
-#annealingParameters = classes.AnnealingParameters(1000,.8,10,.01,1000,1)
+#annealingParameters = classes.AnnealingParameters(100,.85,5,.05,1,1) # For testing
+#annealingParameters = classes.AnnealingParameters(1000,.8,10,.01,1000,1) # For final
+annealingParameters = classes.AnnealingParameters(1000,.8,10,.01,1000,1) # For final (longer run)
 
 random.seed(1000) # Set seed so we can reproduce results
 
@@ -34,8 +35,8 @@ def analyzeAllBenchmarks():
 
 		anneal(dataset, annealingParameters,newCost,"Output/final_annealingNewCost_",'Annealed Floorplan - Area and Connections')
 
-	#alignImages.createImages('Output/initialMatchPairs_','Output/annealing_','Output/annealingNewCost_','Output/Comparison of Initial to Annealed (Area and All)_')
 
+	alignImages.createImagesForFinal('Output/final_annealing_','Output/final_annealingNewCost_','Output/Final Comparison_')
 
 
 
