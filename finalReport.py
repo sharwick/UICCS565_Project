@@ -10,7 +10,7 @@ import random
 
 #annealingParameters = classes.AnnealingParameters(100,.85,5,.05,1,1) # For testing
 #annealingParameters = classes.AnnealingParameters(1000,.8,10,.01,1000,1) # For final
-annealingParameters = classes.AnnealingParameters(1000,.8,10,.01,1000,1) # For final (longer run)
+annealingParameters = classes.AnnealingParameters(5000,.8,10,.01,10000,1) # For final (longer run)
 
 random.seed(1000) # Set seed so we can reproduce results
 
